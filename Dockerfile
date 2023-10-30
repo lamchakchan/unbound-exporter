@@ -12,9 +12,18 @@ RUN strip unbound_exporter
 # Release container
 FROM alpine:latest
 
+ENV LISTEN_HOST=""
+ENV LISTEN_PORT=""
+ENV TELEMETRY_PATH=""
+ENV UNBOUND_HOST=""
+ENV CA=""
+ENV CERT=""
+ENV KEY=""
+
 ENV WORK_DIR=/opt/app
 WORKDIR $WORK_DIR
+COPY scripts/ $WORK_DIR
 COPY --from=0 $WORK_DIR/unbound_exporter .
 
-EXPOSE 9167
-ENTRYPOINT [ "./unbound_exporter" ]
+EXPOSE $LISTEN_PORT
+CMD sh start.sh
